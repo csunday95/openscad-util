@@ -14,7 +14,7 @@ module revolve_text(radius, chars, font_size, thickness, arc_fraction=1, interna
                         chars[i], 
                         font = "Courier New; Style = Bold", 
                         size = font_size, 
-                        valign = "center", halign = "center"
+                        valign = "bottom", halign = "center"
                     );
     }
 }
