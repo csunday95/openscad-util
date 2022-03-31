@@ -33,11 +33,11 @@ module cylinder_locking_lug_L(height, sector_angle, inner_radius, socket=false, 
   }
   
   translate([0, 0, height])
-    rotate_extrude(angle=socket ? sector_angle : sector_angle / 2)
+    rotate_extrude(angle=socket ? 1.05 * sector_angle : sector_angle / 2)
       translate([inner_radius, 0, 0])
         square([height * dims_mult, height * dims_mult]);
 }
 
-$fs = 0.1;
-$fa = 0.1;
-// cylinder_locking_lug_L(1, 30, 3, 2);
+//$fs = 0.1;
+//$fa = 0.1;
+//cylinder_locking_lug_L(2, 60, 5, socket=false);
