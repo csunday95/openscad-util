@@ -1,6 +1,4 @@
 
-include <zero_finders.scad>
-
 function epicycloid_point(r, kp1, theta) = [
   r * (kp1 * cos(theta) - cos(kp1 * theta)),
   r * (kp1 * sin(theta) - sin(kp1 * theta))
@@ -88,7 +86,7 @@ module pinion_profile(pitch_diameter, leaf_count, dedendum_depth) {
   difference() {
     circle(r=pitch_radius);
     for (a = [0:leaf_angle_subtend:360 - leaf_angle_subtend]) {
-      rotate([0, 0, a]) 
+      rotate([0, 0, a])
         translate([dedenum_outward_shift, 0, 0])
           polygon([
             [pitch_radius, -dedendum_upper_width / 2],
@@ -104,46 +102,3 @@ module pinion_profile(pitch_diameter, leaf_count, dedendum_depth) {
         circle(r=addendum_radius);
   }
 }
-
-$fs = 0.2;
-$fa = 0.2;
-
-wheel_diameter = 80;
-wheel_tooth_count = 96;
-gear_ratio = 8;
-
-rotate([0, 0, $t*360/gear_ratio])
-epicycloid_wheel_profile(
-  pitch_diameter=wheel_diameter,
-  tooth_count=wheel_tooth_count,
-  pinion_gear_ratio=gear_ratio
-);
-
-tooth_angle = 360 / wheel_tooth_count / 2;
-generating_radius = wheel_diameter / 2 / gear_ratio / 2;
-obj_func = function(t)  
-  epicycloid_point(generating_radius, 2 * gear_ratio, t)[1] - 
-  sin(tooth_angle / 2) * wheel_diameter / 2;
-
-addendum_t = find_zero_bisect(
-  f=obj_func,
-  [tooth_angle, 30],
-  iterations=30
-);
-
-addendum_len = 1.3 * abs(
-  epicycloid_point(generating_radius, 2 * gear_ratio, 0)[0] - 
-  epicycloid_point(generating_radius, 2 * gear_ratio, addendum_t)[0]
-);
-
-cyl_point(epicycloid_point(wheel_diameter / 2 / gear_ratio, gear_ratio, 19), r=0.2);
-//cyl_point(epicycloid_point(wheel_diameter / 2 / gear_ratio, gear_ratio, addendum_t - tooth_angle), r=0.2);
-
-// TODO: compute dedendum based on wheel addendum
-translate([wheel_diameter / 2 + wheel_diameter / 2 / gear_ratio, 0, 0])
- rotate([0, 0, -$t*360])
- pinion_profile(
-    pitch_diameter=wheel_diameter / gear_ratio,
-    leaf_count=wheel_tooth_count / gear_ratio,
-    dedendum_depth=addendum_len
-  );
