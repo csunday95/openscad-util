@@ -1,12 +1,17 @@
+
+module rounded_bar_profile(width, length) {
+  translate([-width/2, 0]) {
+    square([width, length]);
+    translate([width/2, 0])
+      circle(r=width / 2);
+    translate([width / 2, length])
+      circle(r=width / 2);
+  }
+}
+
 module rounded_bar(width, length, thickness) {
   linear_extrude(thickness) {
-    translate([-width/2, 0]) {
-      square([width, length]);
-      translate([width/2, 0])
-        circle(r=width / 2);
-      translate([width / 2, length])
-        circle(r=width / 2);
-    }
+    rounded_bar_profile(width, length);
   }
 }
 
