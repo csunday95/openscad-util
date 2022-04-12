@@ -1,4 +1,15 @@
 
+module bar_point2_point(p1, p2, width, thickness, intrinsic_translation=[0,0]) {
+  length = norm(p2 - p1);
+  direction_vec = (p2 - p1) / length;
+  rot = atan2(direction_vec[1], direction_vec[0]);
+  linear_extrude(thickness)
+    translate(p1)
+      rotate([0, 0, rot - 90])
+        translate([-width/2, 0] + intrinsic_translation)
+          square([width, length]);
+}
+
 module rounded_bar_profile(width, length) {
   translate([-width/2, 0]) {
     square([width, length]);
