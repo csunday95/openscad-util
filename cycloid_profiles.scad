@@ -98,7 +98,11 @@ module pinion_profile(pitch_diameter, leaf_count, dedendum_depth) {
   }
   for (a = [0:leaf_angle_subtend:360 - leaf_angle_subtend]) {
     rotate([0, 0, a + leaf_angle_subtend / 2])
-      translate([pitch_radius, 0, 0])
-        circle(r=addendum_radius);
+      translate([pitch_radius * cos(leaf_angle_subtend / 4), 0, 0])
+        difference() {
+          circle(r=addendum_radius);
+          translate([-addendum_radius, 0])
+            square([addendum_radius * 2, addendum_radius * 2], center=true);
+        }
   }
 }
