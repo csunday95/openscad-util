@@ -1,4 +1,18 @@
 
+module cylinder_pt2pt3D(p1, p2, radius) {
+  dist = norm(p2 - p1);
+  dir_vector = (p2 - p1) / dist;
+  // azimuth angle
+  az = atan2(dir_vector[1], dir_vector[0]);
+  // altitude angle
+  alt = atan2(dir_vector[2], norm([dir_vector[0], dir_vector[1]]));
+  echo([alt, az]);
+  // rotate about y axis and z axis, translate to p1
+  translate(p1)
+    rotate([0, 90 - alt, az])
+      cylinder(r=radius, h=dist);
+}
+
 module bar_point2_point(p1, p2, width, thickness, intrinsic_translation=[0,0]) {
   length = norm(p2 - p1);
   direction_vec = (p2 - p1) / length;
@@ -24,6 +38,15 @@ module rounded_bar(width, length, thickness) {
   linear_extrude(thickness) {
     rounded_bar_profile(width, length);
   }
+}
+
+module rounded_bar_point2point_profile(p1, p2, width) {
+  length = sqrt((p1[0] - p2[0]) ^ 2 + (p1[1] - p2[1]) ^ 2);
+  direction_vec = [(p2[0] - p1[0]) / length, (p2[1] - p1[1]) / length];
+  rot = atan2(direction_vec[1], direction_vec[0]);
+  translate(p1)
+    rotate([0, 0, rot - 90])
+  rounded_bar_profile(width, length);
 }
 
 module rounded_bar_point2point(p1, p2, width, thickness) {
